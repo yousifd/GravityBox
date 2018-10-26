@@ -1,21 +1,19 @@
 #include "Player.hpp"
+#include <iostream>
 
-Player::Player() {
+Player::Player(std::shared_ptr<b2World> world)
+{
     m_x_vel = 0.f;
     m_y_vel = 0.f;
-    m_max_vel = 0.25f;
 
-    sf::Vector2f size(50.f, 50.f);
-    m_sprite = std::make_shared<sf::RectangleShape>(size);
-    m_sprite->setFillColor(sf::Color::Green);
+    m_game_object = new GameObject(sf::Color::Green, 50.f, 50.f, 200.f, -50.f, world);
 }
 
 Player::~Player()
 {}
 
-void Player::Update(float deltaTime, std::shared_ptr<sf::RenderWindow>& window) {
-    m_sprite->move(m_x_vel, m_y_vel);
-    window->draw(*m_sprite);
+void Player::Update(float delta_time, std::shared_ptr<sf::RenderWindow>& window) {
+    m_game_object->Update(delta_time, window);
 }
 
 void Player::SetXVelocity(float x) {
