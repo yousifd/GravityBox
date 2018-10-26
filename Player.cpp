@@ -3,7 +3,7 @@
 
 Player::Player(std::shared_ptr<b2World> world)
 {
-    m_game_object = new GameObject(sf::Color::Green, 50.f, 50.f, 200.f, -50.f, world);
+    m_game_object = new GameObject(sf::Color::Green, 50.f, 50.f, 200.f, 50.f, true, world);
 }
 
 Player::~Player()

@@ -1,9 +1,9 @@
 #include <Box2D/Box2D.h>
 #include "Game.hpp"
+#include "GameObject.hpp"
 
 Game::Game() : 
     m_window(new sf::RenderWindow(sf::VideoMode(1280, 720), "Gravity Box")),
-    // TODO(yousifd): Alginment issues might be because I have things flipped
     m_gravity(new b2Vec2(0.0f, m_gravity_vel)),
     m_world(new b2World(*m_gravity)),
     m_player(new Player(m_world))
@@ -43,31 +43,15 @@ void Game::UpdateGravity(bool left) {
     }
 }
 
-sf::RectangleShape Game::Ground(float width, float height, float x, float y) {
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(x, -y);
-    b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
-    b2PolygonShape groundBox;
-    groundBox.SetAsBox(width / 2.f, height / 2.f);
-    groundBody->CreateFixture(&groundBox, 0.f);
-    sf::Vector2f size(width, height);
-    sf::RectangleShape ground(size);
-    ground.setFillColor(sf::Color::Red);
-    ground.setOrigin(width / 2.f, height / 2.f);
-    ground.setPosition(sf::Vector2f(x, y));
-
-    return ground;
-}
-
 void Game::Start() {
     sf::Clock clock;
     sf::Time prev_time;
 
     // Ground
-    auto ground = Ground(1280.f, 10.f, 1280.f/2.f, 720.f);
-    auto roof = Ground(1280.f, 10.f, 1280.f/2.f, 0.f);
-    auto left = Ground(10.f, 720.f, 0.f, 720.f/2.f);
-    auto right = Ground(10.f, 720.f, 1280.f, 720.f/2.f);
+    GameObject ground(sf::Color::Red, 1280.f, 10.f, 1280.f / 2.f, 720.f, false, m_world);
+    GameObject roof(sf::Color::Red, 1280.f, 10.f, 1280.f / 2.f, 0.f, false, m_world);
+    GameObject left(sf::Color::Red, 10.f, 720.f, 0.f, 720.f / 2.f, false, m_world);
+    GameObject right(sf::Color::Red, 10.f, 720.f, 1280.f, 720.f / 2.f, false, m_world);
 
     while (m_window->isOpen())
     {
@@ -93,16 +77,6 @@ void Game::Start() {
                             break;
                     }
                     break;
-                case sf::Event::KeyReleased:
-                    switch (event.key.code)
-                    {
-                        case sf::Keyboard::Escape:
-                            m_window->close();
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
                 default:
                     break;
             }
@@ -115,10 +89,11 @@ void Game::Start() {
         m_world->Step(1.f / 60.f, 6, 2);
         m_player->Update(elapsed_time, m_window);
 
-        m_window->draw(ground);
-        m_window->draw(roof);
-        m_window->draw(left);
-        m_window->draw(right);
+        ground.Update(elapsed_time, m_window);
+        roof.Update(elapsed_time, m_window);
+        left.Update(elapsed_time, m_window);
+        right.Update(elapsed_time, m_window);
+
         m_window->display();
 
         prev_time = clock.getElapsedTime();
