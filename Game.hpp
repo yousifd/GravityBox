@@ -12,6 +12,7 @@ public:
   sf::RectangleShape Ground(float width, float height, float x, float y);
 
 private:
+  const float m_gravity_vel = -1.f;
   std::shared_ptr<sf::RenderWindow> m_window;
   std::shared_ptr<b2Vec2> m_gravity;
   std::shared_ptr<b2World> m_world;

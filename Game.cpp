@@ -1,11 +1,10 @@
 #include <Box2D/Box2D.h>
 #include "Game.hpp"
-#include <iostream>
 
 Game::Game() : 
     m_window(new sf::RenderWindow(sf::VideoMode(1280, 720), "Gravity Box")),
     // TODO(yousifd): Alginment issues might be because I have things flipped
-    m_gravity(new b2Vec2(0.0f, -1.0f)),
+    m_gravity(new b2Vec2(0.0f, m_gravity_vel)),
     m_world(new b2World(*m_gravity)),
     m_player(new Player(m_world))
 {
@@ -17,33 +16,31 @@ Game::~Game() {
 
 void Game::UpdateGravity(bool left) {
     b2Vec2 gravity = m_world->GetGravity();
-    // std::cout << "Before Gravity: " << gravity.x << " " << gravity.y << std::endl;
     if (left) {
         if (gravity.x < 0) { // Going Left
-            m_world->SetGravity(b2Vec2(0.f, 1.f));
+            m_world->SetGravity(b2Vec2(0.f, -m_gravity_vel));
         } else if (gravity.x > 0) { // Going Right
-            m_world->SetGravity(b2Vec2(0.f, -1.f));
+            m_world->SetGravity(b2Vec2(0.f, m_gravity_vel));
         }
 
         if (gravity.y > 0) { // Going Up
-            m_world->SetGravity(b2Vec2(1.f, 0.f));
+            m_world->SetGravity(b2Vec2(-m_gravity_vel, 0.f));
         } else if (gravity.y < 0) { // Going Down
-            m_world->SetGravity(b2Vec2(-1.f, 0.f));
+            m_world->SetGravity(b2Vec2(m_gravity_vel, 0.f));
         }
     } else {
         if (gravity.x < 0) { // Going Left
-            m_world->SetGravity(b2Vec2(0.f, -1.f));
+            m_world->SetGravity(b2Vec2(0.f, m_gravity_vel));
         } else if (gravity.x > 0) { // Going Right
-            m_world->SetGravity(b2Vec2(0.f, 1.f));
+            m_world->SetGravity(b2Vec2(0.f, -m_gravity_vel));
         }
 
         if (gravity.y > 0) { // Going Up
-            m_world->SetGravity(b2Vec2(-1.f, 0.f));
+            m_world->SetGravity(b2Vec2(m_gravity_vel, 0.f));
         } else if (gravity.y < 0) { // Going Down
-            m_world->SetGravity(b2Vec2(1.f, 0.f));
+            m_world->SetGravity(b2Vec2(-m_gravity_vel, 0.f));
         }
     }
-    // std::cout << "After Gravity: " << m_world->GetGravity().x << " " << m_world->GetGravity().y << std::endl;
 }
 
 sf::RectangleShape Game::Ground(float width, float height, float x, float y) {
@@ -51,11 +48,12 @@ sf::RectangleShape Game::Ground(float width, float height, float x, float y) {
     groundBodyDef.position.Set(x, -y);
     b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
     b2PolygonShape groundBox;
-    groundBox.SetAsBox(width, height);
+    groundBox.SetAsBox(width / 2.f, height / 2.f);
     groundBody->CreateFixture(&groundBox, 0.f);
     sf::Vector2f size(width, height);
     sf::RectangleShape ground(size);
     ground.setFillColor(sf::Color::Red);
+    ground.setOrigin(width / 2.f, height / 2.f);
     ground.setPosition(sf::Vector2f(x, y));
 
     return ground;
@@ -64,13 +62,12 @@ sf::RectangleShape Game::Ground(float width, float height, float x, float y) {
 void Game::Start() {
     sf::Clock clock;
     sf::Time prev_time;
-    const float velocity = 0.15f;
 
     // Ground
-    auto ground = Ground(1280.f, 10.f, 0.f, 710.f);
-    auto roof = Ground(1280.f, 10.f, 0.f, 0.f);
-    auto left = Ground(10.f, 720.f, 0.f, 0.f);
-    auto right = Ground(10.f, 720.f, 1270.f, 0.f);
+    auto ground = Ground(1280.f, 10.f, 1280.f/2.f, 720.f);
+    auto roof = Ground(1280.f, 10.f, 1280.f/2.f, 0.f);
+    auto left = Ground(10.f, 720.f, 0.f, 720.f/2.f);
+    auto right = Ground(10.f, 720.f, 1280.f, 720.f/2.f);
 
     while (m_window->isOpen())
     {
@@ -86,18 +83,10 @@ void Game::Start() {
                         case sf::Keyboard::Escape:
                             m_window->close();
                             break;
-                        case sf::Keyboard::W:
-                            m_player->SetYVelocity(-.20);
-                            break;
-                        case sf::Keyboard::S:
-                            m_player->SetYVelocity(.20);
-                            break;
                         case sf::Keyboard::A:
-                            m_player->SetXVelocity(-velocity);
                             UpdateGravity(true);
                             break;
                         case sf::Keyboard::D:
-                            m_player->SetXVelocity(velocity);
                             UpdateGravity(false);
                             break;
                         default:
@@ -109,18 +98,6 @@ void Game::Start() {
                     {
                         case sf::Keyboard::Escape:
                             m_window->close();
-                            break;
-                        case sf::Keyboard::W:
-                            m_player->SetYVelocity(velocity);
-                            break;
-                        case sf::Keyboard::S:
-                            m_player->SetYVelocity(-velocity);
-                            break;
-                        case sf::Keyboard::A:
-                            m_player->SetXVelocity(velocity);
-                            break;
-                        case sf::Keyboard::D:
-                            m_player->SetXVelocity(-velocity);
                             break;
                         default:
                             break;
