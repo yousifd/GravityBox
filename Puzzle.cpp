@@ -19,7 +19,7 @@ void Puzzle::Generate(int width, int height, b2World &world) {
     for (int x = 0; x < width; x++) {
         m_tiles.push_back(std::vector<Tile>());
         for (int y = 0; y < height; y++) {
-            m_tiles[x].push_back(Tile(x * (1280/width), y * (720/height), world));
+            m_tiles[x].push_back(Tile(x * (1280.f/width), y * (720.f/height), world));
         }
     }
 }

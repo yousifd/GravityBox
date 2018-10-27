@@ -17,7 +17,7 @@ private:
   float m_scale;
 
   // Rendering Info
-  std::shared_ptr<sf::RectangleShape> m_sprite;
+  sf::RectangleShape m_sprite;
 
   // Physics Info
   b2BodyDef m_body_def;

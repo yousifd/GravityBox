@@ -48,6 +48,7 @@ void Game::UpdateGravity(bool left) {
 }
 
 void Game::Start() {
+    // TODO(yousifd): Performance Optimizations
     sf::Clock clock;
     sf::Time prev_time;
 
@@ -89,7 +90,7 @@ void Game::Start() {
         m_window.clear();
 
         // Updates
-        // TODO(yousifd): Figure out how to use elapsed_time to reduce dependance on fps
+        // TODO(yousifd): Figure out how to use elapsed_time to reduce dependance on cpu
         // Might not need to since physics happens on its own time.
         float elapsed_time = (clock.getElapsedTime() - prev_time).asSeconds();
         m_world.Step(1.f / 60.f, 6, 2);

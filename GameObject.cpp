@@ -7,10 +7,10 @@ GameObject::GameObject(sf::Color color, float width, float height, float x, floa
 
     // Sprite
     sf::Vector2f size(width, height);
-    m_sprite = std::make_shared<sf::RectangleShape>(size);
-    m_sprite->setPosition(x, y);
-    m_sprite->setOrigin(size.x / 2, size.y / 2);
-    m_sprite->setFillColor(color);
+    m_sprite = sf::RectangleShape(size);
+    m_sprite.setPosition(x, y);
+    m_sprite.setOrigin(size.x / 2, size.y / 2);
+    m_sprite.setFillColor(color);
 
     // Physics
     m_body_def.position.Set(x, -y);
@@ -36,8 +36,10 @@ GameObject::~GameObject() {
 
 void GameObject::Update(float delta_time, sf::RenderWindow &window)
 {
-    b2Vec2 pos = m_body->GetPosition();
-    m_sprite->setPosition(pos.x, -pos.y);
-    m_sprite->setRotation(180/b2_pi * m_body->GetAngle());
-    window.draw(*m_sprite);
+    if (m_body->GetType() == b2_dynamicBody) {
+        b2Vec2 pos = m_body->GetPosition();
+        m_sprite.setPosition(pos.x, -pos.y);
+        m_sprite.setRotation(180 / b2_pi * m_body->GetAngle());
+    }
+    window.draw(m_sprite);
 }
