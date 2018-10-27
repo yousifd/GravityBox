@@ -16,39 +16,48 @@ Game::Game() :
 Game::~Game() {
 }
 
-void Game::UpdateGravity(bool left) {
-    // TODO(yousifd): Rotate Camera
-    // const float time_between_gravity_changes = .5f;
+void Game::UpdateGravityLeft() {
     b2Vec2 gravity = m_world.GetGravity();
-    if (left) {
-        if (gravity.x < 0) { // Going Left
-            m_world.SetGravity(b2Vec2(0.f, -m_gravity_vel));
-        } else if (gravity.x > 0) { // Going Right
-            m_world.SetGravity(b2Vec2(0.f, m_gravity_vel));
-        }
-
-        if (gravity.y > 0) { // Going Up
-            m_world.SetGravity(b2Vec2(-m_gravity_vel, 0.f));
-        } else if (gravity.y < 0) { // Going Down
-            m_world.SetGravity(b2Vec2(m_gravity_vel, 0.f));
-        }
-    } else {
-        if (gravity.x < 0) { // Going Left
-            m_world.SetGravity(b2Vec2(0.f, m_gravity_vel));
-        } else if (gravity.x > 0) { // Going Right
-            m_world.SetGravity(b2Vec2(0.f, -m_gravity_vel));
-        }
-
-        if (gravity.y > 0) { // Going Up
-            m_world.SetGravity(b2Vec2(m_gravity_vel, 0.f));
-        } else if (gravity.y < 0) { // Going Down
-            m_world.SetGravity(b2Vec2(-m_gravity_vel, 0.f));
-        }
+    if (gravity.x < 0) { // Going Left
+        m_world.SetGravity(b2Vec2(0.f, -m_gravity_vel));
+    } else if (gravity.x > 0) { // Going Right
+        m_world.SetGravity(b2Vec2(0.f, m_gravity_vel));
     }
+
+    if (gravity.y > 0) { // Going Up
+        m_world.SetGravity(b2Vec2(-m_gravity_vel, 0.f));
+    } else if (gravity.y < 0) { // Going Down
+        m_world.SetGravity(b2Vec2(m_gravity_vel, 0.f));
+    }
+
+    sf::View view = m_window.getView();
+    view.rotate(-90.f);
+    m_window.setView(view);
+}
+
+void Game::UpdateGravityRight() {
+    b2Vec2 gravity = m_world.GetGravity();
+    if (gravity.x < 0) { // Going Left
+        m_world.SetGravity(b2Vec2(0.f, m_gravity_vel));
+    } else if (gravity.x > 0) { // Going Right
+        m_world.SetGravity(b2Vec2(0.f, -m_gravity_vel));
+    }
+
+    if (gravity.y > 0) { // Going Up
+        m_world.SetGravity(b2Vec2(m_gravity_vel, 0.f));
+    } else if (gravity.y < 0) { // Going Down
+        m_world.SetGravity(b2Vec2(-m_gravity_vel, 0.f));
+    }
+
+    sf::View view = m_window.getView();
+    view.rotate(90.f);
+    m_window.setView(view);
 }
 
 void Game::Start() {
     // TODO(yousifd): Performance Optimizations
+    // TODO(yousifd): Rotate Camera
+        // Make screen fit the rotated camera
     sf::Clock clock;
     sf::Time prev_time;
 
@@ -73,10 +82,10 @@ void Game::Start() {
                             m_window.close();
                             break;
                         case sf::Keyboard::A:
-                            UpdateGravity(true);
+                            UpdateGravityLeft();
                             break;
                         case sf::Keyboard::D:
-                            UpdateGravity(false);
+                            UpdateGravityRight();
                             break;
                         default:
                             break;

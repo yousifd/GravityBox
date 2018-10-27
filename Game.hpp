@@ -13,9 +13,11 @@ public:
   void Start();
 
 private:
-  void UpdateGravity(bool left);
+  void UpdateGravityLeft();
+  void UpdateGravityRight();
 
   const float m_gravity_vel = -0.2f;
+  bool m_gravity_updated;
   sf::RenderWindow m_window;
   b2Vec2 m_gravity;
   b2World m_world;
