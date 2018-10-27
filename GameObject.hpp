@@ -8,10 +8,10 @@
 class GameObject {
 public:
   GameObject(sf::Color color, float width, float height, float x, float y,
-             bool dynamic, std::shared_ptr<b2World> world);
+             bool dynamic, b2World &world);
   ~GameObject();
 
-  void Update(float delta_time, std::shared_ptr<sf::RenderWindow> &window);
+  void Update(float delta_time, sf::RenderWindow &window);
 
 private:
   float m_scale;

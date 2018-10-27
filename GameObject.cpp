@@ -1,8 +1,7 @@
 #include "GameObject.hpp"
-#include <iostream>
 
 GameObject::GameObject(sf::Color color, float width, float height, float x, float y,
-                       bool dynamic, std::shared_ptr<b2World> world)
+                       bool dynamic, b2World &world)
 {
     m_scale = 30.0f;
 
@@ -24,22 +23,21 @@ GameObject::GameObject(sf::Color color, float width, float height, float x, floa
         m_fixture_def.density = 1.0f;
         m_fixture_def.friction = 0.3f;
 
-        m_body = world->CreateBody(&m_body_def);
+        m_body = world.CreateBody(&m_body_def);
         m_body->CreateFixture(&m_fixture_def);
     } else { // Static
-        m_body = world->CreateBody(&m_body_def);
+        m_body = world.CreateBody(&m_body_def);
         m_body->CreateFixture(&m_shape, 0.f);
     }
 }
 
 GameObject::~GameObject() {
-
 }
 
-void GameObject::Update(float delta_time, std::shared_ptr<sf::RenderWindow> &window)
+void GameObject::Update(float delta_time, sf::RenderWindow &window)
 {
     b2Vec2 pos = m_body->GetPosition();
     m_sprite->setPosition(pos.x, -pos.y);
     m_sprite->setRotation(180/b2_pi * m_body->GetAngle());
-    window->draw(*m_sprite);
+    window.draw(*m_sprite);
 }
