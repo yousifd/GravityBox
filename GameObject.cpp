@@ -43,3 +43,7 @@ void GameObject::Update(float delta_time, sf::RenderWindow &window)
     }
     window.draw(m_sprite);
 }
+
+sf::Vector2f GameObject::GetPosition() {
+    return m_sprite.getPosition();
+}

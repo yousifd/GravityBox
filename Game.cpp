@@ -57,7 +57,7 @@ void Game::UpdateGravityRight() {
 void Game::Start() {
     // TODO(yousifd): Performance Optimizations
     // TODO(yousifd): Rotate Camera
-        // Make screen fit the rotated camera
+        // smooth movement
     sf::Clock clock;
     sf::Time prev_time;
 
@@ -110,6 +110,10 @@ void Game::Start() {
         roof.Update(elapsed_time, m_window);
         left.Update(elapsed_time, m_window);
         right.Update(elapsed_time, m_window);
+
+        sf::View view = m_window.getView();
+        view.setCenter(m_player.GetPosition());
+        m_window.setView(view);
 
         m_window.display();
 

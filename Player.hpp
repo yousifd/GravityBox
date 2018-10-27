@@ -11,9 +11,10 @@ public:
   Player(b2World &world);
   ~Player();
   void Update(float delta_time, sf::RenderWindow &window);
+  sf::Vector2f GetPosition();
 
 private:  
-  GameObject* m_game_object;
+  GameObject *m_game_object;
 };
 
 #endif // PLAYER_H_

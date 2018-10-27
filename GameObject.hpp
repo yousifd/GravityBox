@@ -12,6 +12,7 @@ public:
   ~GameObject();
 
   void Update(float delta_time, sf::RenderWindow &window);
+  sf::Vector2f GetPosition();
 
 private:
   float m_scale;
