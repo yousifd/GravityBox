@@ -15,9 +15,6 @@ Tile::Tile(float x, float y, b2World &world) {
 }
 
 Tile::~Tile() {
-    for (int i = 0; i < 4; i++) {
-        delete m_walls[i];
-    }
 }
 
 void Tile::Update(float delta_time, sf::RenderWindow &window) {
