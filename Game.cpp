@@ -31,7 +31,7 @@ void Game::UpdateGravityLeft() {
     }
 
     sf::View view = m_window.getView();
-    view.rotate(-90.f);
+    view.rotate(90.f);
     m_window.setView(view);
 }
 
@@ -50,7 +50,7 @@ void Game::UpdateGravityRight() {
     }
 
     sf::View view = m_window.getView();
-    view.rotate(90.f);
+    view.rotate(-90.f);
     m_window.setView(view);
 }
 
