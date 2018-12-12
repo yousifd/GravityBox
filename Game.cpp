@@ -57,7 +57,7 @@ void Game::UpdateGravityRight() {
 void Game::Start() {
     // TODO(yousifd): Performance Optimizations
     // TODO(yousifd): Rotate Camera
-        // smooth movement
+        // Instead of Rotating Instantly, set a value and interpolate to it based on elapsed time
     sf::Clock clock;
     sf::Time prev_time;
 
