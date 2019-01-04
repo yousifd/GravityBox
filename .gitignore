@@ -1,4 +1,5 @@
-.vscode
+.vs
 *.o
 *.gch
 *.exe
+CppProperties.json
